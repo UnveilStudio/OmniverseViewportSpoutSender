@@ -1,37 +1,72 @@
+<p align="center">
+  <img src="assets/banner.png" alt="OmniverseViewportSpoutSender — real-time viewport streaming for NVIDIA Omniverse Kit 109" width="100%" />
+</p>
+
+<p align="center">
+  <img alt="Kit SDK" src="https://img.shields.io/badge/NVIDIA%20Omniverse-Kit%20109-76B900?logo=nvidia&logoColor=white">
+  <img alt="Platform" src="https://img.shields.io/badge/platform-Windows%20x64-0078D6?logo=windows">
+  <img alt="Spout SDK" src="https://img.shields.io/badge/Spout%20SDK-2.007.017-aa6eff">
+  <img alt="License" src="https://img.shields.io/badge/license-MIT-green">
+  <img alt="DLL bundled" src="https://img.shields.io/badge/SpoutLibrary.dll-bundled-7c3aed">
+</p>
+
 # OmniverseViewportSpoutSender
 
 Real-time **Spout** GPU texture streaming of the active viewport for **NVIDIA Omniverse Kit 109**.
 
-Stream the rendered viewport (no UI chrome) of any Kit-based app to Spout-aware applications such as **TouchDesigner**, **Resolume**, **OBS**, **MadMapper**, etc. — Windows only.
+Stream the rendered viewport (no UI chrome) of any Kit-based app to Spout-aware applications such as **TouchDesigner**, **Resolume**, **OBS**, **MadMapper**, vMix, Notch, etc. — Windows only.
 
 Ships as a single Kit extension: `kit109.viewport_spout`. Sender name on the Spout network: `OmniverseViewport`.
 
-![status](https://img.shields.io/badge/platform-windows--x86_64-blue) ![kit](https://img.shields.io/badge/Kit-109-76b900) ![license](https://img.shields.io/badge/license-MIT-green)
+## How it works
 
----
+```mermaid
+flowchart LR
+    KIT["Kit 109 viewport<br/>(RTX render)"] --> HYD["omni.hydratexture<br/>DRAWABLE_CHANGED"]
+    HYD --> CAP["IRendererCapture<br/>capture_next_frame_rp_resource"]
+    CAP --> CB["PyCapsule callback<br/>(buf, w, h, fmt)"]
+    CB --> CT["ctypes.PyCapsule_GetPointer<br/>→ raw void*"]
+    CT --> SDR["spout.SpoutSender<br/>send_image(ptr, w, h, BGRA)"]
+    SDR --> DLL["SpoutLibrary.dll<br/>v2.007.017"]
+    DLL --> DX["DirectX 11<br/>shared NT handle"]
+    DX --> GPU[(GPU shared texture<br/>'OmniverseViewport')]
+    GPU -.-> EXT["TouchDesigner / Resolume<br/>OBS / vMix / Notch"]
 
-## What it does
+    classDef omni fill:#0a1f0a,stroke:#76B900,stroke-width:2px,color:#fff
+    classDef py fill:#1e1e2e,stroke:#aa6eff,stroke-width:2px,color:#fff
+    classDef sys fill:#0d1117,stroke:#444,color:#fff
+    classDef gpu fill:#1c3a14,stroke:#76B900,stroke-width:2px,color:#fff
+    class KIT,HYD,CAP omni
+    class CB,CT,SDR py
+    class DLL,DX sys
+    class GPU gpu
+    class EXT sys
+```
 
-- Captures the **viewport-only LDR color** (BGRA8) — no UI, no overlays
-- Sends it via **Spout2** GPU texture sharing as a sender named `OmniverseViewport`
-- Runs at the viewport's render rate, with a frame-pending guard that drops frames if readback is slower than render rate
-- Adds a small **Spout Viewport Sender** UI window with Start / Stop buttons and live status
+**Total copies per frame**: GPU→CPU readback (unavoidable from Python) + CPU→GPU upload into the Spout DX11 shared texture.
 
-## How the pipeline works
+The capture path is **viewport-only LDR color** — no UI chrome, no overlays, no menus. The sender keeps a `_capture_pending` guard so that if downstream readback is slower than the render rate, frames are dropped instead of queueing up.
 
-1. Subscribe to `omni.hydratexture.GLOBAL_EVENT_DRAWABLE_CHANGED` filtered to the active viewport's `hydra_texture` event key — fires once per rendered viewport frame.
-2. Resolve the LDR `RpResource` via `hydra_texture._get_drawable_ldr_resource(result_handle)`.
-3. Trigger an async GPU→CPU readback through `omni.kit.renderer.capture.IRendererCapture.capture_next_frame_rp_resource_callback`.
-4. In the callback, extract the raw pointer from the `PyCapsule` with `ctypes.pythonapi.PyCapsule_GetPointer` and pass it as `c_void_p` directly to `SpoutSender.send_image(ptr, w, h, GL_BGRA_EXT)` — zero extra Python copies.
+## A small love letter to Omniverse
 
-Total copies: **GPU → CPU readback** (unavoidable from Python) + **CPU → GPU upload** into the Spout DX11 shared texture.
+A note we wanted to put somewhere — read it as fan mail to NVIDIA, not a feature request.
+
+NVIDIA Omniverse is, in our completely-not-impartial opinion, **one of the most beautiful pieces of infrastructure ever shipped to creative tooling**. The composability of USD as a runtime scene, the Hydra render delegates abstraction, the multi-GPU RTX path, the Carb plugin system, the way the whole Kit application is itself just a manifest of extensions — there is so much craft in there it almost hurts. As people who live on stage and behind a TouchDesigner network, we look at Omniverse and we see the operating system we wish the show-business / creative VFX / motion-design world had.
+
+And yet — the gorgeous part of it, the **RTX renderer**, is the one bit you can never really invite home. It can't be redistributed. It can't be embedded. It can't be a `.dll` you drop into a custom 3D app the way Spout's runtime drops into yours. We *get* the business reason. We just want to put on record, gently, that **the day NVIDIA ships an RTX runtime DLL — or, dream of dreams, source for the path tracer — under any kind of redistribute-friendly license, an entire generation of live-show, club-visual, projection-mapping, and motion-graphics people will lose their minds**. RTX-quality real-time has a particular fascination that game-engine-biased lighting just doesn't reach. It's a different kind of light.
+
+It's also a little wild that **a renderer this good, multi-GPU and multi-process aware out of the box, is still chasing Unity and Unreal as a "game engine"** in the public mind, when the engineering underneath is in many places further along. We'd love to see Omniverse get the love it deserves on the *show* side of the world, not just the digital-twin / industrial side.
+
+So: thank you, NVIDIA. Thank you for keeping `Kit` open enough that we can write extensions like this one. Thank you for the multi-GPU realtime that nobody else is shipping. And thank you, in advance, for whatever future version of this stack lets us actually ship Omniverse rendering inside a live performance. We'll be here, ready, with a Spout receiver patched in.
+
+— The Unveil Studio crew, with love. 💚
 
 ## Requirements
 
-- Windows 10/11 x64
-- NVIDIA Omniverse **Kit SDK 109** (or any Kit 109 application — USD Composer, custom apps built from `kit-app-template`, etc.)
-- DirectX 11 capable GPU
-- A Spout receiver to display the stream (TouchDesigner Spout In TOP, Resolume, etc.)
+- Windows 10 / 11 x64
+- NVIDIA Omniverse **Kit SDK 109** (USD Composer, custom apps built from `kit-app-template`, etc.)
+- DirectX 11 capable GPU (any NVIDIA GeForce / RTX from the last decade is fine)
+- A Spout receiver to display the stream — TouchDesigner *Spout In TOP*, Resolume, OBS with the *Spout2 Plugin*, etc.
 
 ## Install
 
@@ -47,7 +82,7 @@ Total copies: **GPU → CPU readback** (unavoidable from Python) + **CPU → GPU
 
 ### Option B — register as an external extension search path
 
-If you don't want to copy the folder, point Kit's extension manager at this repo's `source/extensions/` directory and enable `kit109.viewport_spout` from the Extension Manager UI.
+Point Kit's Extension Manager at this repo's `source/extensions/` folder and enable `kit109.viewport_spout` from the Extension Manager UI.
 
 ## Usage
 
@@ -88,12 +123,24 @@ source/extensions/kit109.viewport_spout/
 
 ## Credits
 
-- **Spout2** — <https://spout.zeal.co/> (BSD-2-Clause). `SpoutLibrary.dll` is built from the upstream Spout2 SDK.
-- **SpoutForPython** — <https://github.com/leadedge/SpoutForPython>. The bundled ctypes layout was inspired by this project; the bindings here are a from-scratch reimplementation to avoid the ABI drift in the upstream wrappers.
-- **NVIDIA Omniverse Kit SDK** — capture pipeline relies on `omni.kit.renderer.capture` and `omni.kit.hydra_texture`.
+> **Built on top of [Spout2](https://github.com/leadedge/Spout2) by Lynn Jarvis.**
+> All the heavy lifting — the DirectX shared-texture protocol, the GL/DX
+> interop, the `SpoutLibrary.dll` itself, fifteen years of patient maintenance —
+> is his work. This extension is a thin Kit-flavoured wrapper that hands a
+> viewport framebuffer to Spout and lets that magic DLL do its thing.
+> Huge thanks to Lynn and the Spout community for keeping the project alive,
+> stable, and open. ❤️
+>
+> Bundled: `SpoutLibrary.dll` v2.007.017 (x64).
+
+- **NVIDIA Omniverse Kit SDK** — capture pipeline relies on `omni.kit.renderer.capture` and `omni.kit.hydra_texture`. See the love letter above.
+- **[SpoutForPython](https://github.com/leadedge/SpoutForPython)** by Lynn Jarvis — inspired the bundled `spout/` ctypes layout. The bindings here are a from-scratch reimplementation pinned to `SpoutLibrary.h v2.007.017` to avoid ABI drift.
+- **Sister repos** in the Unveil Studio family — same shape of "thin Python over a magic Windows DLL":
+  - [SPOUT2ForPython](https://github.com/UnveilStudio/SPOUT2ForPython) — same bindings, packaged for general Python use
+  - [NDIForPython](https://github.com/UnveilStudio/NDIForPython) — NDI 6 sender/receiver for Python
 
 ## License
 
 This extension is released under the **MIT License** — see [LICENSE](LICENSE).
 
-`SpoutLibrary.dll` is distributed under the upstream **BSD-2-Clause** Spout2 license.
+`SpoutLibrary.dll` is distributed under the upstream **BSD-2-Clause** Spout2 license; see the bottom of [LICENSE](LICENSE) for the full text.
