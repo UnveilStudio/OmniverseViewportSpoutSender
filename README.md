@@ -1,10 +1,10 @@
-# omni-spout
+# OmniverseViewportSpoutSender
 
 Real-time **Spout** GPU texture streaming of the active viewport for **NVIDIA Omniverse Kit 109**.
 
 Stream the rendered viewport (no UI chrome) of any Kit-based app to Spout-aware applications such as **TouchDesigner**, **Resolume**, **OBS**, **MadMapper**, etc. — Windows only.
 
-Ships as a single Kit extension: `kit109.viewport_spout`.
+Ships as a single Kit extension: `kit109.viewport_spout`. Sender name on the Spout network: `OmniverseViewport`.
 
 ![status](https://img.shields.io/badge/platform-windows--x86_64-blue) ![kit](https://img.shields.io/badge/Kit-109-76b900) ![license](https://img.shields.io/badge/license-MIT-green)
 
