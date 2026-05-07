@@ -1,0 +1,15 @@
+[package]
+title = "Viewport Spout Sender"
+version = "0.1.0"
+description = "Streams the active viewport in real-time via Spout GPU texture sharing (Windows only)."
+category = "Rendering"
+keywords = ["spout", "streaming", "viewport", "texture", "sharing"]
+
+[dependencies]
+"omni.kit.renderer.capture" = {}
+"omni.kit.viewport.utility" = {}
+"omni.kit.hydra_texture" = {}
+"omni.ui" = {}
+
+[[python.module]]
+name = "kit109.viewport_spout"
