@@ -180,7 +180,7 @@ source/extensions/kit109.viewport_spout/
 
 - **[UnveilStudio/SPOUT2ForPython](https://github.com/UnveilStudio/SPOUT2ForPython)** — **the actual base of this implementation.** The `spout/` package vendored inside `kit109.viewport_spout/` (`_lib.py`, `sender.py`, `receiver.py`, `utils.py` + `SpoutLibrary.dll`) is a verbatim copy of that repo's ctypes bindings. We wrote SPOUT2ForPython first as a standalone Python wrapper around Spout2, then dropped it in here so the Kit extension stays self-contained — no `pip install`, no PYTHONPATH tricks, just `repo.bat build` and run.
 - **NVIDIA Omniverse Kit SDK** — capture pipeline relies on `omni.kit.renderer.capture` and `omni.kit.hydra_texture`. See the love letter above.
-- **[SpoutForPython](https://github.com/leadedge/SpoutForPython)** by Lynn Jarvis — earlier reference Python wrapper around Spout2; SPOUT2ForPython is a from-scratch reimplementation pinned to `SpoutLibrary.h v2.007.017` to avoid ABI drift, but we owe the original idea to Lynn's prior art.
+- **[SpoutForPython](https://github.com/FifthChat/SpoutForPython)** by FifthChat — earlier reference Python wrapper around Spout2; SPOUT2ForPython is a from-scratch reimplementation pinned to `SpoutLibrary.h v2.007.017` to avoid ABI drift, but we owe the original idea to FifthChat's prior art.
 
 ## License
 
