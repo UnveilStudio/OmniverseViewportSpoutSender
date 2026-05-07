@@ -135,9 +135,8 @@ source/extensions/kit109.viewport_spout/
 
 - **NVIDIA Omniverse Kit SDK** — capture pipeline relies on `omni.kit.renderer.capture` and `omni.kit.hydra_texture`. See the love letter above.
 - **[SpoutForPython](https://github.com/leadedge/SpoutForPython)** by Lynn Jarvis — inspired the bundled `spout/` ctypes layout. The bindings here are a from-scratch reimplementation pinned to `SpoutLibrary.h v2.007.017` to avoid ABI drift.
-- **Sister repos** in the Unveil Studio family — same shape of "thin Python over a magic Windows DLL":
+- **Sister repo** in the Unveil Studio family — same shape of "thin Python over a magic Windows DLL":
   - [SPOUT2ForPython](https://github.com/UnveilStudio/SPOUT2ForPython) — same bindings, packaged for general Python use
-  - [NDIForPython](https://github.com/UnveilStudio/NDIForPython) — NDI 6 sender/receiver for Python
 
 ## License
 
