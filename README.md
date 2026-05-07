@@ -18,6 +18,8 @@ Stream the rendered viewport (no UI chrome) of any Kit-based app to Spout-aware 
 
 Ships as a single Kit extension: `kit109.viewport_spout`. Sender name on the Spout network: `OmniverseViewport`.
 
+Built on top of our own **[SPOUT2ForPython](https://github.com/UnveilStudio/SPOUT2ForPython)** — the bundled `spout/` package inside the extension is that exact ctypes layer, vendored in so the extension is self-contained and you don't have to `pip install` anything to run it inside Kit.
+
 ## How it works
 
 ```mermaid
@@ -133,10 +135,9 @@ source/extensions/kit109.viewport_spout/
 >
 > Bundled: `SpoutLibrary.dll` v2.007.017 (x64).
 
+- **[UnveilStudio/SPOUT2ForPython](https://github.com/UnveilStudio/SPOUT2ForPython)** — **the actual base of this implementation.** The `spout/` package vendored inside `kit109.viewport_spout/` (`_lib.py`, `sender.py`, `receiver.py`, `utils.py` + `SpoutLibrary.dll`) is a verbatim copy of that repo's ctypes bindings. We wrote SPOUT2ForPython first as a standalone Python wrapper around Spout2, then dropped it in here so the Kit extension stays self-contained — no `pip install`, no PYTHONPATH tricks, just `repo.bat build` and run.
 - **NVIDIA Omniverse Kit SDK** — capture pipeline relies on `omni.kit.renderer.capture` and `omni.kit.hydra_texture`. See the love letter above.
-- **[SpoutForPython](https://github.com/leadedge/SpoutForPython)** by Lynn Jarvis — inspired the bundled `spout/` ctypes layout. The bindings here are a from-scratch reimplementation pinned to `SpoutLibrary.h v2.007.017` to avoid ABI drift.
-- **Sister repo** in the Unveil Studio family — same shape of "thin Python over a magic Windows DLL":
-  - [SPOUT2ForPython](https://github.com/UnveilStudio/SPOUT2ForPython) — same bindings, packaged for general Python use
+- **[SpoutForPython](https://github.com/leadedge/SpoutForPython)** by Lynn Jarvis — earlier reference Python wrapper around Spout2; SPOUT2ForPython is a from-scratch reimplementation pinned to `SpoutLibrary.h v2.007.017` to avoid ABI drift, but we owe the original idea to Lynn's prior art.
 
 ## License
 
