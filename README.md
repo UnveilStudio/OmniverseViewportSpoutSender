@@ -74,19 +74,51 @@ So: thank you, NVIDIA. Thank you for keeping Kit open enough that we can ship ex
 
 ## Install
 
-### Option A — drop into a `kit-app-template` repo
+### Quick install — `install.bat` (recommended)
 
-1. Copy `source/extensions/kit109.viewport_spout/` into your repo's `source/extensions/` directory.
+Clone this repo so that it sits **inside** your `kit-app-template/` (next to `repo.bat`) **or** as a **sibling** of it, then double-click `install.bat`. That's it.
+
+```text
+D:\YourWork\
+├── kit-app-template\
+│   ├── repo.bat
+│   └── source\
+└── OmniverseViewportSpoutSender\         ← clone us here
+    └── install.bat                       ← double-click
+```
+
+The installer:
+
+1. Locates the kit-app-template root by looking for `repo.bat`
+2. Creates a Windows **junction** at `<kit-app-root>\source\extensions\kit109.viewport_spout` pointing back to this repo's source — **no copy, no admin rights**, and `git pull` here updates the live extension instantly
+3. Adds `"kit109.viewport_spout" = {}` to `[dependencies]` of every `.kit` file under `<kit-app-root>\source\apps\` (idempotent — re-running won't double-patch)
+
+Then build and launch as usual:
+```powershell
+cd <kit-app-template>
+.\repo.bat build
+.\repo.bat launch
+```
+
+The **Spout Viewport Sender** window appears once Kit boots. Click *Start Streaming* and you're broadcasting as `OmniverseViewport` on the Spout network.
+
+> **Uninstall**: delete the junction with `cmd /c rmdir "<kit-app-template>\source\extensions\kit109.viewport_spout"` — **do NOT** `Remove-Item -Recurse`, it would follow the junction and wipe this repo. Then remove the dependency line from your `.kit` file.
+
+### Manual install
+
+If you'd rather wire it up by hand:
+
+1. Copy (or `mklink /J`) `source/extensions/kit109.viewport_spout/` into your kit-app-template's `source/extensions/`.
 2. Add the extension to your `.kit` file's `[dependencies]`:
    ```toml
    "kit109.viewport_spout" = {}
    ```
-3. Rebuild: `.\repo.bat build` — the build creates a junction from `_build/.../exts/` back to the source folder.
-4. Launch: `.\repo.bat launch`. The **Spout Viewport Sender** window appears; click **Start Streaming**.
+3. Rebuild: `.\repo.bat build` — the build creates an internal junction from `_build/.../exts/` back to the source folder.
+4. Launch: `.\repo.bat launch`.
 
-### Option B — register as an external extension search path
+### Option C — Extension Manager search path
 
-Point Kit's Extension Manager at this repo's `source/extensions/` folder and enable `kit109.viewport_spout` from the Extension Manager UI.
+Skip the build step entirely: point Kit's *Extension Manager* at this repo's `source/extensions/` folder and enable `kit109.viewport_spout` from the UI. Useful for trying it inside a vanilla Kit app without touching its `.kit` file.
 
 ## Usage
 
