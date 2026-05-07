@@ -22,6 +22,15 @@ Built on top of our own **[SPOUT2ForPython](https://github.com/UnveilStudio/SPOU
 
 > **Disclaimer.** This is an unofficial, community-built Kit extension. It is **not affiliated with, sponsored by, or endorsed by NVIDIA Corporation**. "NVIDIA," "Omniverse," and "Kit" are trademarks of NVIDIA Corporation, referenced here only to identify the platform this extension is compatible with (nominative fair use). The extension consumes public Kit Python APIs (`omni.kit.renderer.capture`, `omni.kit.viewport.utility`, `omni.kit.hydra_texture`, `omni.ui`) — it does **not** redistribute, modify, or replace any NVIDIA software component. The Kit SDK itself is licensed by NVIDIA under their own [Software License Agreement](https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-software-license-agreement/) and must be obtained directly from NVIDIA.
 
+## Demo
+
+<p align="center">
+  <img src="assets/demo.png" alt="Kit 109 viewport (RTX Real-Time 2.0, 74 FPS) streaming via Spout into a TouchDesigner Spout In TOP" width="100%" />
+</p>
+
+Left: NVIDIA Omniverse **Kit 109** rendering an RTX scene at **74 FPS** (RTX Real-Time 2.0, GeForce RTX 4090) — the *Spout Viewport Sender* panel shows status `Streaming · 'OmniverseViewport'`.
+Right: **TouchDesigner 2025** with a *Spout In* TOP picking up the `OmniverseViewport` sender, displaying the live viewport at full quality, lighting, materials and motion intact. Zero file I/O, GPU-shared texture across processes.
+
 ## How it works
 
 ```mermaid
