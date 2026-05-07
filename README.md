@@ -53,15 +53,15 @@ The capture path is **viewport-only LDR color** — no UI chrome, no overlays, n
 
 ## A small love letter to Omniverse
 
-A note we wanted to put somewhere — read it as fan mail to NVIDIA, not a feature request.
+Read this as fan mail to NVIDIA, not a feature request.
 
-NVIDIA Omniverse is, in our completely-not-impartial opinion, **one of the most beautiful pieces of infrastructure ever shipped to creative tooling**. The composability of USD as a runtime scene, the Hydra render delegates abstraction, the multi-GPU RTX path, the Carb plugin system, the way the whole Kit application is itself just a manifest of extensions — there is so much craft in there it almost hurts. As people who live on stage and behind a TouchDesigner network, we look at Omniverse and we see the operating system we wish the show-business / creative VFX / motion-design world had.
+Omniverse is one of the most beautiful pieces of infrastructure ever shipped to creative tooling. USD as a live scene. Hydra render delegates. Multi-GPU RTX out of the box. The Carb plugin system. A whole Kit app that is, at its core, just a manifest of extensions. As people who live on stage and behind a TouchDesigner patch, we look at it and we see the operating system the live-show, VFX and motion-design world has been quietly missing.
 
-And yet — the gorgeous part of it, the **RTX renderer**, is the one bit you can never really invite home. It can't be redistributed. It can't be embedded. It can't be a `.dll` you drop into a custom 3D app the way Spout's runtime drops into yours. We *get* the business reason. We just want to put on record, gently, that **the day NVIDIA ships an RTX runtime DLL — or, dream of dreams, source for the path tracer — under any kind of redistribute-friendly license, an entire generation of live-show, club-visual, projection-mapping, and motion-graphics people will lose their minds**. RTX-quality real-time has a particular fascination that game-engine-biased lighting just doesn't reach. It's a different kind of light.
+The catch is that the most beautiful part — the **RTX renderer** — is the one we can't bring home with us. It can't be redistributed, embedded, or dropped into a custom 3D app the way Spout's runtime drops into yours. We get the business reason. We just want to say, gently: the day NVIDIA ships an RTX runtime DLL — or, dream of dreams, opens the path tracer — an entire generation of live visualists, club VJs, projection mappers and motion designers will lose their minds. RTX realtime has a quality game-engine lighting simply doesn't reach. It's a different kind of light.
 
-It's also a little wild that **a renderer this good, multi-GPU and multi-process aware out of the box, is still chasing Unity and Unreal as a "game engine"** in the public mind, when the engineering underneath is in many places further along. We'd love to see Omniverse get the love it deserves on the *show* side of the world, not just the digital-twin / industrial side.
+It's also a little wild that a renderer this good, multi-GPU and multi-process aware by default, is still chasing Unity and Unreal in the public imagination, when the engineering underneath is in many places already further along. We'd love to see Omniverse get the love it deserves on the *show* side of the industry, not only the digital-twin and industrial side.
 
-So: thank you, NVIDIA. Thank you for keeping `Kit` open enough that we can write extensions like this one. Thank you for the multi-GPU realtime that nobody else is shipping. And thank you, in advance, for whatever future version of this stack lets us actually ship Omniverse rendering inside a live performance. We'll be here, ready, with a Spout receiver patched in.
+So: thank you, NVIDIA. Thank you for keeping Kit open enough that we can ship extensions like this one. Thank you for the multi-GPU realtime that nobody else is shipping. And thank you, in advance, for whatever future version of this stack lets us put Omniverse rendering inside a live performance. We'll be here, ready, with a Spout receiver patched in.
 
 — The Unveil Studio crew, with love. 💚
 
