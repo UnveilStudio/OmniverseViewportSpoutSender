@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <img alt="Kit SDK" src="https://img.shields.io/badge/NVIDIA%20Omniverse-Kit%20109-76B900?logo=nvidia&logoColor=white">
+  <img alt="Kit SDK" src="https://img.shields.io/badge/Omniverse%20Kit-109-76B900">
   <img alt="Platform" src="https://img.shields.io/badge/platform-Windows%20x64-0078D6?logo=windows">
   <img alt="Spout SDK" src="https://img.shields.io/badge/Spout%20SDK-2.007.017-aa6eff">
   <img alt="License" src="https://img.shields.io/badge/license-MIT-green">
@@ -19,6 +19,8 @@ Stream the rendered viewport (no UI chrome) of any Kit-based app to Spout-aware 
 Ships as a single Kit extension: `kit109.viewport_spout`. Sender name on the Spout network: `OmniverseViewport`.
 
 Built on top of our own **[SPOUT2ForPython](https://github.com/UnveilStudio/SPOUT2ForPython)** — the bundled `spout/` package inside the extension is that exact ctypes layer, vendored in so the extension is self-contained and you don't have to `pip install` anything to run it inside Kit.
+
+> **Disclaimer.** This is an unofficial, community-built Kit extension. It is **not affiliated with, sponsored by, or endorsed by NVIDIA Corporation**. "NVIDIA," "Omniverse," and "Kit" are trademarks of NVIDIA Corporation, referenced here only to identify the platform this extension is compatible with (nominative fair use). The extension consumes public Kit Python APIs (`omni.kit.renderer.capture`, `omni.kit.viewport.utility`, `omni.kit.hydra_texture`, `omni.ui`) — it does **not** redistribute, modify, or replace any NVIDIA software component. The Kit SDK itself is licensed by NVIDIA under their own [Software License Agreement](https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-software-license-agreement/) and must be obtained directly from NVIDIA.
 
 ## How it works
 
