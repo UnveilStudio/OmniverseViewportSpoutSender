@@ -74,11 +74,10 @@ if (Test-Path $Target) {
     if ($info.Attributes -band [System.IO.FileAttributes]::ReparsePoint) {
         Write-Host "  junction         : already in place ($Target)" -ForegroundColor DarkGray
     } else {
-        Write-Host ''
-        Write-Host "ERROR: a real folder (not a junction) already exists at:" -ForegroundColor Red
-        Write-Host "       $Target"
-        Write-Host "       Delete it (or move it elsewhere) and re-run install.bat."
-        exit 1
+        Write-Host "  junction         : already installed as a real folder, not a junction" -ForegroundColor DarkGray
+        Write-Host "                     ($Target)" -ForegroundColor DarkGray
+        Write-Host "                     leaving it as-is. To switch to a live junction, delete that folder" -ForegroundColor DarkGray
+        Write-Host "                     ('cmd /c rmdir <path>') and re-run install.bat." -ForegroundColor DarkGray
     }
 } else {
     cmd /c mklink /J "`"$Target`"" "`"$Source`"" | Out-Null
